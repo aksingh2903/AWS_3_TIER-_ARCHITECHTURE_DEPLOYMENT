@@ -1,0 +1,28 @@
+SNS:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: server-down-topic
+
+  EmailSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: email
+      TopicArn: !Ref SNS
+      Endpoint: prajyotb07@gmail.com
+
+  Alarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: server-down-alarm
+      ComparisonOperator: LessThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      MetricName: StatusCheckFailed_Instance
+      Namespace: AWS/EC2
+      Period: 60
+      Statistic: Minimum
+      Threshold: 1
+      AlarmActions:
+        - !Ref SNS
+      Dimensions:
+        - Name: InstanceId
+          Value: !Ref WebServerInstance

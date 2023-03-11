@@ -1,0 +1,23 @@
+Resources:
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      AvailabilityZones:
+        - us-east-1a
+        - us-east-1b
+      Listeners:
+        -
+          LoadBalancerPort: '80'
+          Protocol: HTTP
+          InstancePort: '80'
+      HealthCheck:
+        Target: HTTP:80/
+        HealthyThreshold: '3'
+        UnhealthyThreshold: '5'
+        Interval: '30'
+        Timeout: '5'
+      SecurityGroups:
+        - sg-0123456789abcdef
+      Tags:
+        - Key: Name
+          Value: MyLoadBalancer
